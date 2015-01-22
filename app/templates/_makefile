@@ -11,9 +11,21 @@ list:
 # required for list
 no_targets__:
 
-# install all dependencies (do not forget to create a virtualenv first)
-setup:
+# install all dependencies (do not forget to create a virtualenv first and activate rvm or another ruby manager)
+setup: setup-ruby setup-python setup-node setup-bower
+
+setup-python:
 	@pip install -U -e .\[tests\]
+
+setup-ruby:
+	@bundle
+
+setup-node:
+	@npm install .
+
+setup-bower:
+	@cd <%= package.pythonName %> && bower prune && bower install
+	@cd <%= package.pythonName %> && node bower_list.js
 
 # test your application (tests in the tests/ directory)
 test: <% if (package.services.mongodb) { %>mongo_test <% } %><% if (package.services.redis) { %>redis_test <% } %>unit

@@ -1,0 +1,17 @@
+{
+  "name": "<%= package.pythonName %>",
+  "version": "0.1.0",
+  "description": "<%= package.pythonName %>",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "bower": "*",
+    "organize-bower-sources": "desandro/organize-bower-sources"
+  },
+  "author": "",
+  "license": "<%= package.license %>",
+  "homepage": "<%= package.url %>"
+}

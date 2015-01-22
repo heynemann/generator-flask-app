@@ -1,0 +1,20 @@
+{
+  "name": "<%= package.pythonName %>",
+  "version": "0.1.0",
+  "homepage": "<%= package.url %>",
+  "authors": [
+    "<%= package.author.name %>"
+  ],
+  "license": "<%= package.license %>",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+  },
+  "devDependencies": {}
+}

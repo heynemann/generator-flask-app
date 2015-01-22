@@ -24,20 +24,14 @@ var FlaskAppGenerator = yeoman.generators.Base.extend({
     PythonPackageGenerator.prototype.askFor.apply(this, [true, function(pythonPackage) {
       var prompts = [{
         type: 'confirm',
-        name: 'coffee',
-        message: 'Use CoffeeScript?',
-        default: true
-      }, {
-        type: 'confirm',
-        name: 'compass',
-        message: 'Use Compass?',
+        name: 'mongoengine',
+        message: 'Use MongoEngine for the models?',
         default: true
       }];
 
       self.prompt(prompts, function (props) {
         pythonPackage['flask'] = {
-          coffee: props.coffee,
-          compass: props.compass
+          mongoengine: props.mongoengine
         };
 
         self.pythonPackage = pythonPackage;
@@ -69,13 +63,35 @@ var FlaskAppGenerator = yeoman.generators.Base.extend({
     this.template('_bower_list.js', pkg.pythonName + '/bower_list.js');
     this.template('_init.py', pkg.pythonName + '/static/__init__.py');
     this.template('_assets.py', pkg.pythonName + '/static/assets.py');
-    this.template('_base.coffee', pkg.pythonName + '/static/coffee/base.coffee');
+    this.template('_base.coffee', pkg.pythonName + '/static/coffee/000-base.coffee');
     this.template('_all.scss', pkg.pythonName + '/static/scss/all.scss');
+    this.template('_base.scss', pkg.pythonName + '/static/scss/_base.scss');
+
+    // sprites
+    this.mkdir(pkg.pythonName + '/static/images/common');
+    this.template('_sprite.scss', pkg.pythonName + '/static/scss/_sprite.scss');
+    this.copy('_check.png', pkg.pythonName + '/static/images/common/' + 'check.png');
+
+    // ruby for compass
+    this.template('_ruby-gemset', '.ruby-gemset');
+    this.template('_ruby-version', '.ruby-version');
+    this.template('_Gemfile', 'Gemfile');
+
+    // bower
+    this.template('_package.json', 'package.json');
+    this.template('_bowerrc', pkg.pythonName + '/.bowerrc');
+    this.template('_bower.json', pkg.pythonName + '/bower.json');
 
     // handlers
     this.mkdir(pkg.pythonName + '/handlers');
     this.template('_handlers_init.py', pkg.pythonName + '/handlers/__init__.py');
     this.template('_healthcheck.py', pkg.pythonName + '/handlers/healthcheck.py');
+    this.template('_handlers_index.py', pkg.pythonName + '/handlers/index.py');
+
+    // templates
+    this.mkdir(pkg.pythonName + '/templates');
+    this.template('_layout.html', pkg.pythonName + '/templates/layout.html');
+    this.template('_index.html', pkg.pythonName + '/templates/index.html');
   },
 
   getUsageMessage: function() {

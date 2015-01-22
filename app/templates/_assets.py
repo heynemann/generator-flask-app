@@ -39,15 +39,15 @@ def init_app(app):
     assets_env.auto_build = app.config['WEBASSETS_AUTO_BUILD']
     assets_env.url_expire = False
 
-    # Tell flask-assets where to look for our coffeescript and sass files.
+    # Tell flask-assets where to look for our coffeescript and scss files.
     assets_env.load_path = [
-        os.path.join(os.path.dirname(__file__), 'sass'),
+        os.path.join(os.path.dirname(__file__), 'scss'),
         os.path.join(os.path.dirname(__file__), 'coffee'),
         VENDOR_PATH
     ]
 
     bower_dependencies = read_bower_json()
-    js_files = bower_dependencies['.js']
+    js_files = bower_dependencies.get('.js', [])
 
     js_out = 'js/js_app.%(version)s.js'
     if app.debug:
@@ -55,7 +55,7 @@ def init_app(app):
 
     js_files.append(
         assets.Bundle(
-            get_coffee_files(),
+            *get_coffee_files(),
             depends=('*.coffee'),
             # OTHER CONFIGS
             filters=['coffeescript'], output=js_out
@@ -66,7 +66,7 @@ def init_app(app):
         encoding="utf-8",
         css_dir="css",
         fonts_dir="fonts",
-        sass_dir="sass",
+        sass_dir="scss",
         images_dir="images",
         javascripts_dir="js",
         relative_assets=True,
@@ -98,7 +98,7 @@ def init_app(app):
     if app.debug:
         css_out = 'css/base.css'
 
-    css_files = bower_dependencies['.css']
+    css_files = bower_dependencies.get('.css', [])
     css_base_bundle = assets.Bundle(
         *css_files,
         filters=['cssmin'],
@@ -114,10 +114,7 @@ def init_app(app):
 
 
 def read_bower_json():
-    result = {
-        '.js': [],
-        '.css': []
-    }
+    result = {}
     bower_dependencies = os.path.join(
         os.path.dirname(__file__), 'bower_dependencies.json'
     )
@@ -133,4 +130,14 @@ def read_bower_json():
 
 
 def get_coffee_files():
-    return []
+    coffee_files = []
+
+    coffee_root = os.path.join(
+        os.path.dirname(__file__), 'coffee'
+    )
+
+    for filename in os.listdir(coffee_root):
+        if os.path.splitext(filename)[1] == '.coffee':
+            coffee_files.append(filename)
+
+    return list(sorted(coffee_files))

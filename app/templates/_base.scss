@@ -1,0 +1,61 @@
+/* This is just sample CSS - feel free to delete */
+
+body {
+    background: #fafafa;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #333;
+}
+
+.hero-unit {
+    margin: 50px auto 0 auto;
+    width: 300px;
+    font-size: 18px;
+    font-weight: 200;
+    line-height: 30px;
+    background-color: #eee;
+    border-radius: 6px;
+    padding: 60px;
+
+    h1 {
+        font-size: 60px;
+        line-height: 1;
+        letter-spacing: -1px;
+    }
+
+    h2 {
+        font-size: 18px;
+        font-weight: bold;
+        text-align: center;
+        padding: 20px;
+        color: #666;
+        line-height: 15px;
+    }
+
+    h3 {
+        font-size: 16px;
+        font-weight: bold;
+        text-align: center;
+        padding-bottom: 15px;
+        color: #999;
+        line-height: 13px;
+    }
+
+    .statement {
+        font-weight: bold;
+    }
+
+    li {
+        position: relative;
+        padding-left: 20px;
+
+        &:before {
+            content: '';
+            display: block;
+            @include common-sprite(check, $dimensions: true);
+            position: absolute;
+            top: 50%;
+            left: 0;
+            margin-top: -8px;
+        }
+    }
+}

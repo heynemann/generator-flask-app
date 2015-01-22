@@ -51,6 +51,7 @@ setup(
         'derpconf>=0.7.0,<0.8.0',
         'flask-debugtoolbar>=0.9.0,<0.10.0',
         'flask-assets>=0.10',
+        'cssmin>=0.2.0,<0.3.0',
         # add your dependencies here
         # remember to use 'package-name>=x.y.z,<x.y+1.0' notation (this way you get bugfixes)
     ],

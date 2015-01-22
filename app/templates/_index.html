@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <div class="hero-unit">
+        <h1>'Allo, 'Allo!</h1>
+        <h2>Welcome to <%= package.name %></h2>
+        <h3><%= package.description %></h3>
+        <p class="statement">You now have:</p>
+        <ul>
+            <li>Flask Application</li>
+            <li>Templates with Layout</li>
+            <li>Flask Debug Toolbar</li>
+            <li>Authentication</li>
+            <li>Mongo Engine models</li>
+            <li>Coffeescript and Compass</li>
+            <li>Automatic spriting</li>
+        </ul>
+    </div>
+{% endblock content %}

@@ -8,14 +8,14 @@
 # http://www.opensource.org/licenses/<%= package.license%>-license
 # Copyright (c) <%= package.created.year %>, <%= package.author.name %> <<%= package.author.email %>>
 
+from datetime import datetime
 
-from <%= package.pythonName %>.handlers import (
-    healthcheck,
-    index,
-    # add your own handlers here
-)
+from flask import Blueprint, render_template
 
 
-def init_app(app):
-    app.register_blueprint(healthcheck.mod)
-    app.register_blueprint(index.mod)
+mod = Blueprint('index', __name__)
+
+
+@mod.route("/")
+def index():
+    return render_template('index.html', dt=datetime.now().strftime("%d %M %Y - %H %m %s"))
