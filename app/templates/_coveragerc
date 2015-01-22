@@ -1,0 +1,22 @@
+# This file is part of <%= package.name %>.
+# <%= package.url %>
+
+# Licensed under the <%= package.license %> license:
+# http://www.opensource.org/licenses/<%= package.license%>-license
+# Copyright (c) <%= package.created.year %>, <%= package.author.name %> <<%= package.author.email %>>
+
+[run]
+omit =
+    *tests.py
+branch = True
+source =
+    <%= package.pythonName %>
+
+[report]
+exclude_lines =
+    pragma: no cover
+    def __repr__
+    raise NotImplementedError
+    if __name__ == .__main__.:
+    from urllib.parse import parse_qs
+    except ImportError:

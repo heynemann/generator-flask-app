@@ -1,0 +1,14 @@
+// This file is part of <%= package.name %>.
+// <%= package.url %>
+
+// Licensed under the <%= package.license %> license:
+// http://www.opensource.org/licenses/<%= package.license%>-license
+// Copyright (c) <%= package.created.year %>, <%= package.author.name %> <<%= package.author.email %>>
+
+@charset "utf-8";
+
+@import "compass";
+@import "compass/reset";
+
+// Include your own imports here. Remember to put them in the static/scss folder and name them starting with an _, like:
+// _application.scss (would be imported with @import "application")
