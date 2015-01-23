@@ -8,6 +8,7 @@
 # http://www.opensource.org/licenses/<%= package.license%>-license
 # Copyright (c) <%= package.created.year %>, <%= package.author.name %> <<%= package.author.email %>>
 
+import os
 import os.path
 import logging
 import sys
@@ -30,6 +31,17 @@ blueprints = (
     #auth
 )
 
+
+def run_bower_list():
+    bower_list_path = os.path.abspath(os.path.join(os.path.dirname(__file__)))
+    bower_list = 'bower_list.js'
+    try:
+        os.system('cd %s && node %s' % (bower_list_path, bower_list))
+    except Exception:
+        err = sys.exc_info()[1]
+        print "Could not update bower list of assets (%s). Shutting down." % err
+        sys.exit(1)
+
 def create_app(config, debug=False):
     if config is None:
         config = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'config', 'local.conf'))
@@ -47,6 +59,8 @@ def create_app(config, debug=False):
         app.config['DEBUG_TB_PROFILER_ENABLED'] = True
         app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
         app.toolbar = DebugToolbarExtension(app)
+
+        run_bower_list()
 
     return app
 
