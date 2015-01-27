@@ -11,9 +11,18 @@
 
 from flask import Blueprint
 
+<% if (package.services.mongodb && package.flask.mongoengine) { %>
+from <%= package.pythonName %>.db import do_mongoengine_healthcheck
+<% } %>
+
 mod = Blueprint('healthcheck', __name__)
 
 
 @mod.route("/healthcheck/")
 def healthcheck():
+    <% if (package.services.mongodb && package.flask.mongoengine) { %>
+    if not do_mongoengine_healthcheck():
+        return 'MONGODB is DOWN'
+    <% } %>
+
     return 'WORKING'

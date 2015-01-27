@@ -55,6 +55,11 @@ var FlaskAppGenerator = yeoman.generators.Base.extend({
     this.template('_config.py', pkg.pythonName + '/config/__init__.py');
     this.template('_local.conf', pkg.pythonName + '/config/local.conf');
 
+    // mongoengine
+    if (pkg.services.mongodb && pkg.flask.mongoengine) {
+        this.template('_db.py', pkg.pythonName + '/db.py');
+    }
+
     // static assets
     this.mkdir(pkg.pythonName + '/static');
     this.mkdir(pkg.pythonName + '/static/coffee');

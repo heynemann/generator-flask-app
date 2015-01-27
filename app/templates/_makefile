@@ -87,5 +87,5 @@ tox:
 #docs:
 	#@cd <%= package.pythonName %>/docs && make html && open _build/html/index.html
 
-run:
-	@<%= package.pythonName %> -c <%=package.pythonName %>/config/local.conf --debug
+run:<% if (package.services.mongodb) { %> mongo<% } %>
+	@<%= package.commandName %> -c <%=package.pythonName %>/config/local.conf --debug

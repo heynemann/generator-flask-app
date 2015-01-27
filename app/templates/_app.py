@@ -21,12 +21,16 @@ from flask_debugtoolbar import DebugToolbarExtension
 from <%= package.pythonName %> import config as config_module
 from <%= package.pythonName %>.static import assets
 from <%= package.pythonName %> import (
-    handlers
+    handlers,
+    db
 )
 
 blueprints = (
     handlers,
     assets,
+<% if (package.services.mongodb && package.flask.mongoengine) { %>
+    db,
+<% } %>
     #models,
     #auth
 )
