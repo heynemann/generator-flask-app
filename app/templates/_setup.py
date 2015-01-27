@@ -52,6 +52,7 @@ setup(
         'flask-debugtoolbar>=0.9.0,<0.10.0',
         'flask-assets>=0.10',
         'cssmin>=0.2.0,<0.3.0',
+        'Flask-Script>=2.0.0,<2.1.0',
         # add your dependencies here
         # remember to use 'package-name>=x.y.z,<x.y+1.0' notation (this way you get bugfixes)
     ],
@@ -60,8 +61,8 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            # add cli scripts here in this form:
-            '<%= package.pythonName %>=<%= package.pythonName %>.app:main',
+            '<%= package.commandName %>=<%= package.pythonName %>.app:main',
+            '<%= package.commandName %>-manage=<%= package.pythonName %>.manage:main',
         ],
     },
 )

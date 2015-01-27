@@ -43,10 +43,12 @@ var FlaskAppGenerator = yeoman.generators.Base.extend({
 
   app: function () {
     var pkg = this.pythonPackage;
+    pkg.commandName = pkg.pythonName.replace(/[_]/g, '-');
 
     PythonPackageGenerator.prototype.app.apply(this, [pkg]);
 
     this.template('_app.py', pkg.pythonName + '/app.py');
+    this.template('_manage.py', pkg.pythonName + '/manage.py');
 
     // app config
     this.mkdir(pkg.pythonName + '/config');

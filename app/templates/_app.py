@@ -42,6 +42,7 @@ def run_bower_list():
         print "Could not update bower list of assets (%s). Shutting down." % err
         sys.exit(1)
 
+
 def create_app(config, debug=False):
     if config is None:
         config = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'config', 'local.conf'))
