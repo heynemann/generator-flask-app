@@ -59,11 +59,12 @@ kill_redis_test:
 if (package.services.mongodb) { %>
 # get a mongodb instance up (localhost:3333)
 mongo: kill_mongo
+	@rm -rf /tmp/<%= package.name %>/mongolog
 	@mkdir -p /tmp/<%= package.name %>/mongodata && mongod --dbpath /tmp/<%= package.name %>/mongodata --logpath /tmp/<%= package.name %>/mongolog --port 3333 --quiet &
 
 # kill this mongodb instance (localhost:3333)
 kill_mongo:
-	@-ps aux | egrep -i 'mongod.+3333' | egrep -v egrep | awk '{ print $$2 }' | xargs kill -9
+	@-ps aux | egrep -i 'mongod.+3333' | egrep -v egrep | awk '{ print $$2 }' | xargs kill -2
 
 # clear all data in this mongodb instance (localhost: 3333)
 clear_mongo:
@@ -72,13 +73,14 @@ clear_mongo:
 # get a mongodb instance up for your unit tests (localhost:3334)
 mongo_test: kill_mongo_test
 	@rm -rf /tmp/<%= package.name %>/mongotestdata && mkdir -p /tmp/<%= package.name %>/mongotestdata
-	@mongod --dbpath /tmp/<%= package.name %>/mongotestdata --logpath /tmp/<%= package.name %>/mongotestlog --port 3334 --quiet --fork
+	@rm -rf /tmp/<%= package.name %>/mongotestlog
+	@mongod --dbpath /tmp/<%= package.name %>/mongotestdata --logpath /tmp/<%= package.name %>/mongotestlog --port 3334 --quiet --fork --repair
 	@echo 'waiting for mongo...'
 	@until mongo --port 3334 --eval "quit()"; do sleep 0.25; done > /dev/null 2> /dev/null
 
 # kill the test mongodb instance (localhost: 3334)
 kill_mongo_test:
-	@-ps aux | egrep -i 'mongod.+3334' | egrep -v egrep | awk '{ print $$2 }' | xargs kill -9
+	@-ps aux | egrep -i 'mongod.+3334' | egrep -v egrep | awk '{ print $$2 }' | xargs kill -2
 <% } %>
 # run tests against all supported python versions
 tox:

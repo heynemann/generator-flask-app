@@ -14,7 +14,8 @@ import sys
 <% } %>
 
 <% if (package.services.mongodb && package.flask.mongoengine) { %>
-from flask.ext.mongoengine import MongoEngine
+from flask.ext.mongoengine import MongoEngine, MongoEngineSessionInterface
+#from flask.ext.mongoengine import MongoEngineSessionInterface
 from pymongo.errors import AutoReconnect
 <% } %>
 
@@ -35,4 +36,10 @@ def init_app(app):
     logging.info('initializing db')
 <% if (package.services.mongodb && package.flask.mongoengine) { %>
     mongo.init_app(app)
+
+    if app.debug:
+        app.config['DEBUG_TB_PANELS'].append('flask.ext.mongoengine.panels.MongoDebugPanel')
+
+    # uncomment this line and the related import to use mongo as your session store
+    #app.session_interface = MongoEngineSessionInterface(mongo)
 <% } %>

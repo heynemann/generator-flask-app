@@ -55,16 +55,28 @@ def create_app(config, debug=False):
     app.debug = debug
     config_module.init_app(app, config)
 
+
     logging.basicConfig(level=logging.DEBUG)
+
+    if app.debug:
+        app.config['DEBUG_TB_PROFILER_ENABLED'] = True
+        app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
+        app.config['DEBUG_TB_PANELS'] = app.config.get('DEBUG_TB_PANELS', [
+            'flask_debugtoolbar.panels.versions.VersionDebugPanel',
+            'flask_debugtoolbar.panels.timer.TimerDebugPanel',
+            'flask_debugtoolbar.panels.headers.HeaderDebugPanel',
+            'flask_debugtoolbar.panels.request_vars.RequestVarsDebugPanel',
+            'flask_debugtoolbar.panels.config_vars.ConfigVarsDebugPanel',
+            'flask_debugtoolbar.panels.template.TemplateDebugPanel',
+            'flask_debugtoolbar.panels.logger.LoggingPanel',
+            'flask_debugtoolbar.panels.profiler.ProfilerDebugPanel',
+        ])
+        app.toolbar = DebugToolbarExtension(app)
 
     for blueprint in blueprints:
         blueprint.init_app(app)
 
     if app.debug:
-        app.config['DEBUG_TB_PROFILER_ENABLED'] = True
-        app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
-        app.toolbar = DebugToolbarExtension(app)
-
         run_bower_list()
 
     return app
