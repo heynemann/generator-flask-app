@@ -6,7 +6,7 @@
         <h2>Welcome to <%= package.name %></h2>
         <h3><%= package.description %></h3>
         <p class="statement">You now have:</p>
-        <ul>
+        <ul class="check">
             <li>Flask Application</li>
             <li>Flask Commands</li>
             <li>Templates with Layout</li>
@@ -21,6 +21,10 @@
 
         <% if (package.services.mongodb && package.flask.mongoengine) { %>
         <h4>Currently {{ users|length }} users registered.</h4>
+        <% } %>
+
+        <% if (package.flask.useAuth) { %>
+        <a href="/auth/login">Log-in</a>
         <% } %>
     </div>
 {% endblock content %}

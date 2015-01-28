@@ -61,7 +61,9 @@ body {
     li {
         position: relative;
         padding-left: 20px;
+    }
 
+    .check li {
         &:before {
             content: '';
             display: block;
@@ -70,6 +72,15 @@ body {
             top: 50%;
             left: 0;
             margin-top: -8px;
+        }
+    }
+
+    a {
+        font-size: 12px;
+        color: #333;
+        text-decoration: none;
+        &:hover {
+            text-decoration: underline;
         }
     }
 }

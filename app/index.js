@@ -58,10 +58,13 @@ var FlaskAppGenerator = yeoman.generators.Base.extend({
           twitter: false,
           github: false
         };
+        var useAuth = false;
         for (var i=0; i < props.authProviders.length; i++) {
+          useAuth = true;
           pkgAuthProviders[props.authProviders[i]] = true;
         }
         pythonPackage['flask']['authProviders'] = pkgAuthProviders;
+        pythonPackage['flask']['useAuth'] = useAuth;
 
         self.pythonPackage = pythonPackage;
         done();
@@ -89,6 +92,7 @@ var FlaskAppGenerator = yeoman.generators.Base.extend({
         this.template('_db.py', pkg.pythonName + '/db.py');
         this.mkdir(pkg.pythonName + "/models");
         this.template('_models.py', pkg.pythonName + '/models/__init__.py');
+        this.template('_user.py', pkg.pythonName + '/models/user.py');
     }
 
     // static assets
@@ -130,6 +134,12 @@ var FlaskAppGenerator = yeoman.generators.Base.extend({
     this.mkdir(pkg.pythonName + '/templates');
     this.template('_layout.html', pkg.pythonName + '/templates/layout.html');
     this.template('_index.html', pkg.pythonName + '/templates/index.html');
+
+    if (pkg.flask.useAuth) {
+        // authentication
+        this.template('_auth.py', pkg.pythonName + '/auth.py');
+        this.template('_login.html', pkg.pythonName + '/templates/login.html');
+    }
   },
 
   getUsageMessage: function() {

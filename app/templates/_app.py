@@ -22,7 +22,10 @@ from <%= package.pythonName %> import config as config_module
 from <%= package.pythonName %>.static import assets
 from <%= package.pythonName %> import (
     handlers,
-    db
+    db,
+<% if (package.flask.useAuth) { %>
+    auth,
+<% } %>
 )
 
 blueprints = (
@@ -31,8 +34,9 @@ blueprints = (
 <% if (package.services.mongodb && package.flask.mongoengine) { %>
     db,
 <% } %>
-    #models,
-    #auth
+<% if (package.flask.useAuth) { %>
+    auth,
+<% } %>
 )
 
 

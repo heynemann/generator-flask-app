@@ -12,7 +12,7 @@ from datetime import datetime
 
 from flask import Blueprint, render_template
 
-from <%= package.pythonName %>.models import User
+from <%= package.pythonName %>.models.user import User
 
 
 mod = Blueprint('index', __name__)

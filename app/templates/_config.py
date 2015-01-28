@@ -27,6 +27,10 @@ Config.define('MONGODB_USERNAME', None, 'Username for the MongoDB database', 'Mo
 Config.define('MONGODB_PASSWORD', None, 'Password for the MongoDB database', 'MongoDB')
 <% } %>
 
+<% if (package.flask.useAuth) { %>
+Config.define('AUTH_PROVIDERS', None, 'Configuration for authentication providers', 'MongoDB')
+<% } %>
+
 def init_app(app, path=None):
     conf = Config.load(path)
     for conf_option, _ in conf.items.items():
