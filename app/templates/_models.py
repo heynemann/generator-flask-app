@@ -8,17 +8,10 @@
 # http://www.opensource.org/licenses/<%= package.license%>-license
 # Copyright (c) <%= package.created.year %>, <%= package.author.name %> <<%= package.author.email %>>
 
-from datetime import datetime
-
-from flask import Blueprint, render_template
-
-from <%= package.pythonName %>.models import User
+from <%= package.pythonName %>.db import mongo
 
 
-mod = Blueprint('index', __name__)
-
-
-@mod.route("/")
-def index():
-    users = User.objects.all()
-    return render_template('index.html', dt=datetime.now().strftime("%d %M %Y - %H %m %s"), users=users)
+class User(mongo.Document):
+    email = mongo.StringField(required=True)
+    first_name = mongo.StringField(max_length=50)
+    last_name = mongo.StringField(max_length=50)

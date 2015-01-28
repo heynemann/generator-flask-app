@@ -22,12 +22,16 @@ var FlaskAppGenerator = yeoman.generators.Base.extend({
     this.log(yosay('Welcome to the flask application generator\nRun this generator in the folder where your app will be created'));
 
     PythonPackageGenerator.prototype.askFor.apply(this, [true, function(pythonPackage) {
-      var prompts = [{
-        type: 'confirm',
-        name: 'mongoengine',
-        message: 'Use MongoEngine for the models?',
-        default: true
-      }];
+      var prompts = [];
+
+      if (pythonPackage.services.mongodb) {
+        prompts.push({
+          type: 'confirm',
+          name: 'mongoengine',
+          message: 'Use MongoEngine for the models?',
+          default: true
+        });
+      }
 
       self.prompt(prompts, function (props) {
         pythonPackage['flask'] = {
@@ -58,6 +62,8 @@ var FlaskAppGenerator = yeoman.generators.Base.extend({
     // mongoengine
     if (pkg.services.mongodb && pkg.flask.mongoengine) {
         this.template('_db.py', pkg.pythonName + '/db.py');
+        this.mkdir(pkg.pythonName + "/models");
+        this.template('_models.py', pkg.pythonName + '/models/__init__.py');
     }
 
     // static assets

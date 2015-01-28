@@ -18,5 +18,9 @@
             <li>Automatic spriting</li>
             <li>Flask CDN Support</li>
         </ul>
+
+        <% if (package.services.mongodb && package.flask.mongoengine) { %>
+        <h4>Currently {{ users|length }} users registered.</h4>
+        <% } %>
     </div>
 {% endblock content %}
