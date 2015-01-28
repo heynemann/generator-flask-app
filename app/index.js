@@ -33,10 +33,35 @@ var FlaskAppGenerator = yeoman.generators.Base.extend({
         });
       }
 
+      var authProviders = [
+        { name: "Google", value: "google", checked: false },
+        { name: "Facebook", value: "facebook", checked: false },
+        { name: "Twitter", value: "twitter", checked: false },
+        { name: "Github", value: "github", checked: false }
+      ];
+
+      prompts.push({
+        type: 'checkbox',
+        name: 'authProviders',
+        message: 'Services you want to allow your users to authenticate with',
+        choices: authProviders
+      });
+
       self.prompt(prompts, function (props) {
         pythonPackage['flask'] = {
           mongoengine: props.mongoengine
         };
+
+        var pkgAuthProviders = {
+          google: false,
+          facebook: false,
+          twitter: false,
+          github: false
+        };
+        for (var i=0; i < props.authProviders.length; i++) {
+          pkgAuthProviders[props.authProviders[i]] = true;
+        }
+        pythonPackage['flask']['authProviders'] = pkgAuthProviders;
 
         self.pythonPackage = pythonPackage;
         done();
