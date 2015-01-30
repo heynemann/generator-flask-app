@@ -54,7 +54,7 @@ def authenticated(f):
 def before_app_request():
     g.user = None
     if 'user_id' in session:
-        g.user = User.query.filter_by(user_id=session['user_id']).first()
+        g.user = User.objects(user_id=session['user_id']).first()
 
 
 @mod.route('/login/')
@@ -71,7 +71,9 @@ def login_page():
 def logout():
     if 'user_id' in session:
         del session['user_id']
-    return redirect(url_for('auth.login_page', next=request.path))
+    if 'next' in session:
+        del session['next']
+    return redirect(url_for('index.index'))
 
 
 @mod.route('/login/<provider_name>/', methods=['GET', 'POST'])
@@ -85,7 +87,7 @@ def login(provider_name):
         if result.user:
             first_login = False
             result.user.update()
-            user = User.query.filter_by(provider=provider_name, user_id=result.user.id).first()
+            user = User.objects(provider=provider_name, user_id=result.user.id).first()
             if user is None:
                 user = User(
                     username=result.user.username,
@@ -94,12 +96,12 @@ def login(provider_name):
                     user_id=result.user.id,
                     provider=provider_name
                 )
-                mongo.session.add(user)
-                mongo.session.flush()
+                user.save()
                 first_login = True
             else:
                 user.name = result.user.name
                 user.email = result.user.email
+                user.save()
 
             session['user_id'] = user.user_id
             return redirect_next()
@@ -112,8 +114,12 @@ def login(provider_name):
 
 def redirect_next():
     next_url = session.pop('next', None)
-    return redirect(
-        next_url if next_url else url_for(
-            current_app.config.get('LOGIN_REDIRECT_ENDPOINT', '/')
-        )
-    )
+
+    if next_url is None:
+        endpoint = current_app.config.get('LOGIN_REDIRECT_ENDPOINT', None)
+        if endpoint is None:
+            next_url = '/'
+        else:
+            next_url = url_for(endpoint)
+
+    return redirect(next_url)
