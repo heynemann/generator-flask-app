@@ -5,4 +5,5 @@
 # http://www.opensource.org/licenses/<%= package.license%>-license
 # Copyright (c) <%= package.created.year %>, <%= package.author.name %> <<%= package.author.email %>>
 
-recursive-exclude tests *
+prune *
+recursive-include <%= package.pythonName %> *.py *.ini *.conf *.jpg *.jpeg *.coffee *.js *.css *.scss *.gif *.png *.html *.htm .webassets-manifest
