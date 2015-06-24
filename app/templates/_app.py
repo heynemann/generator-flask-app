@@ -22,7 +22,9 @@ from <%= package.pythonName %> import config as config_module
 from <%= package.pythonName %>.static import assets
 from <%= package.pythonName %> import (
     handlers,
+<% if (package.services.mongodb && package.flask.mongoengine) { %>
     db,
+<% } %>
 <% if (package.flask.useAuth) { %>
     auth,
 <% } %>

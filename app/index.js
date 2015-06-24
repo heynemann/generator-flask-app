@@ -129,6 +129,7 @@ var FlaskAppGenerator = yeoman.generators.Base.extend({
     this.template('_handlers_init.py', pkg.pythonName + '/handlers/__init__.py');
     this.template('_healthcheck.py', pkg.pythonName + '/handlers/healthcheck.py');
     this.template('_handlers_index.py', pkg.pythonName + '/handlers/index.py');
+    this.template('_authomatic_ext.py', pkg.pythonName + '/authomatic_ext.py');
 
     // templates
     this.mkdir(pkg.pythonName + '/templates');

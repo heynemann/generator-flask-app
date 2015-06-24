@@ -54,6 +54,7 @@ setup(
         'cssmin>=0.2.0,<0.3.0',
         'Flask-Script>=2.0.0,<2.1.0',
         <% if (package.services.mongodb && package.flask.mongoengine) { %>
+        'pymongo>=2.8,<2.9',
         'flask-mongoengine>=0.7.0,<0.8.0',
         <% } %>
         <% if (package.flask.useAuth) { %>

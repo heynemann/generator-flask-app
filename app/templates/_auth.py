@@ -18,8 +18,7 @@ from flask import (
 
 from authomatic.adapters import WerkzeugAdapter
 from authomatic import Authomatic, provider_id
-from authomatic.providers import oauth2
-from authomatic.providers import oauth1
+from authomatic.providers import oauth2, oauth1
 
 from <%= package.pythonName %>.db import mongo
 from <%= package.pythonName %>.models.user import User
@@ -80,27 +79,39 @@ def logout():
 def login(provider_name):
     response = make_response()
     result = current_app.authomatic.login(
-        WerkzeugAdapter(request, response), provider_name
+        CustomWerkzeugAdapter(request, response), provider_name
     )
 
     if result:
         if result.user:
             first_login = False
             result.user.update()
-            user = User.objects(provider=provider_name, user_id=result.user.id).first()
+            user = User.objects.filter(provider=provider_name, user_id=result.user.id).first()
+
+
+            picture = ''
+            if provider_name == "facebook":
+                picture = "http://graph.facebook.com/%s/picture?type=large" % result.user.id
+            elif result.user.picture:
+                picture = result.user.picture.replace('sz=50', 'sz=%d' % current_app.config['AVATAR_SIZE'])
+            else:
+                picture = result.user.picture
+
             if user is None:
                 user = User(
                     username=result.user.username,
                     email=result.user.email,
                     name=result.user.name,
                     user_id=result.user.id,
-                    provider=provider_name
+                    provider=provider_name,
+                    picture=picture
                 )
                 user.save()
                 first_login = True
             else:
                 user.name = result.user.name
                 user.email = result.user.email
+                user.picture = picture
                 user.save()
 
             session['user_id'] = user.user_id
@@ -123,3 +134,40 @@ def redirect_next():
             next_url = url_for(endpoint)
 
     return redirect(next_url)
+<% if (package.flask.authProviders.google) { %>
+
+
+class CustomGoogle(oauth2.Google):
+    def _fetch(self, *args, **kw):
+        return custom_fetch(self, *args, **kw)
+<% } %>
+<% if (package.flask.authProviders.facebook) { %>
+
+
+class CustomFacebook(oauth2.Facebook):
+    def _fetch(self, *args, **kw):
+        return custom_fetch(self, *args, **kw)
+<% } %>
+
+
+class CustomWerkzeugAdapter(WerkzeugAdapter):
+    @property
+    def url(self):
+        url = current_app.config.get('BASE_URL', None)
+        if not url:
+            url = self.request.base_url  # even if url is empty (not None)
+        else:
+            url = url % (self.request.path.replace('/auth/login/', '').rstrip('/'))
+        return url
+
+PROVIDER_ID_MAP = [
+    <% if (package.flask.authProviders.google) { %>
+    CustomGoogle,
+    <% } %>
+    <% if (package.flask.authProviders.facebook) { %>
+    CustomFacebook,
+    <% } %>
+    <% if (package.flask.authProviders.twitter) { %>
+    oauth1.Twitter,
+    <% } %>
+]

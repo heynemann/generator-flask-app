@@ -28,7 +28,8 @@ Config.define('MONGODB_PASSWORD', None, 'Password for the MongoDB database', 'Mo
 <% } %>
 
 <% if (package.flask.useAuth) { %>
-Config.define('AUTH_PROVIDERS', None, 'Configuration for authentication providers', 'MongoDB')
+Config.define('AUTH_PROVIDERS', None, 'Configuration for authentication providers', 'Auth')
+Config.define('AVATAR_SIZE', 320, 'Default user picture size to store in DB', 'Auth')
 <% } %>
 
 def init_app(app, path=None):

@@ -16,6 +16,9 @@
             <li>Coffeescript and Compass</li>
             <li>Bower support</li>
             <li>Automatic spriting</li>
+            <li>SQLAlchemy Support</li>
+            <li>Resque(PyRes) Support</li>
+            <li>Flask Admin</li>
         </ul>
 
         <% if (package.services.mongodb && package.flask.mongoengine) { %>
@@ -25,6 +28,7 @@
         <% if (package.flask.useAuth) { %>
         {% if g.user %}
         <a href="/auth/logout">Log-out, {{ g.user.name }}</a>
+        <img src="{{ g.user.picture }}" />
         {% else %}
         <a href="/auth/login">Log-in</a>
         {% endif %}

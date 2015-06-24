@@ -13,6 +13,7 @@ from <%= package.pythonName %>.db import mongo
 
 class User(mongo.Document):
     email = mongo.StringField(max_length=2000)
+    picture = mongo.StringField(max_length=2000)
     username = mongo.StringField(max_length=255)
     name = mongo.StringField(max_length=255)
     user_id = mongo.StringField(required=True)

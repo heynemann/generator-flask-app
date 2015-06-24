@@ -12,7 +12,9 @@ from datetime import datetime
 
 from flask import Blueprint, render_template
 
+<% if (package.services.mongodb && package.flask.mongoengine) { %>
 from <%= package.pythonName %>.models.user import User
+<% } %>
 
 
 mod = Blueprint('index', __name__)
@@ -20,5 +22,9 @@ mod = Blueprint('index', __name__)
 
 @mod.route("/")
 def index():
-    users = User.objects.all()
+    <% if (package.services.mongodb && package.flask.mongoengine) { %>
+    users = list(User.objects.all())
+    <% } else { %>
+    users = []
+    <% } %>
     return render_template('index.html', dt=datetime.now().strftime("%d %M %Y - %H %m %s"), users=users)
