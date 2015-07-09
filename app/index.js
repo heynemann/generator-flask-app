@@ -46,7 +46,7 @@ var FlaskAppGenerator = yeoman.generators.Base.extend({
         type: 'confirm',
         name: 'sqlalchemy',
         message: 'Use SQLAlchemy for the models?',
-        default: false
+        default: true
       });
 
       var authProviders = [
@@ -200,6 +200,10 @@ var FlaskAppGenerator = yeoman.generators.Base.extend({
         // authentication
         this.template('_auth.py', pkg.pythonName + '/auth.py');
         this.template('_login.html', pkg.pythonName + '/templates/login.html');
+    }
+
+    if (pkg.flask.admin) {
+      this.template('_admin_index.html', pkg.pythonName + '/templates/admin_index.html');
     }
   },
 

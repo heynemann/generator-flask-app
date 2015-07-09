@@ -10,9 +10,9 @@
 
 from datetime import datetime
 
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, current_app
 
-<% if (package.services.mongodb && package.flask.mongoengine) { %>
+<% if ((package.services.mongodb && package.flask.mongoengine) || package.flask.sqlalchemy) { %>
 from <%= package.pythonName %>.models.user import User
 <% } %>
 
@@ -24,6 +24,8 @@ mod = Blueprint('index', __name__)
 def index():
     <% if (package.services.mongodb && package.flask.mongoengine) { %>
     users = list(User.objects.all())
+    <% } else if (package.flask.sqlalchemy) { %>
+    users = list(current_app.db.session.query(User).all())
     <% } else { %>
     users = []
     <% } %>

@@ -1,8 +1,7 @@
-{% extends "layout.html" %}
+{% extends 'admin/master.html' %}
 
-{% block content %}
+{% block body %}
     <div class="hero-unit">
-        <h1>'Allo, 'Allo!</h1>
         <h2>Welcome to <%= package.name %></h2>
         <h3><%= package.description %></h3>
         <p class="statement">You now have:</p>
@@ -35,4 +34,4 @@
         {% endif %}
         <% } %>
     </div>
-{% endblock content %}
+{% endblock body %}
