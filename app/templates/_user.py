@@ -18,6 +18,7 @@ class User(mongo.Document):
     name = mongo.StringField(max_length=255)
     user_id = mongo.StringField(required=True)
     provider = mongo.StringField(required=True)
+    is_admin = mongo.BooleanField(required=True, default=False)
 <% } %>
 <% if (package.flask.sqlalchemy) { %>
 from <%= package.pythonName %>.db import db
@@ -31,8 +32,9 @@ class User(db.Model):
     username = db.Column(db.String(200))
     email = db.Column(db.String(200), unique=True)
     user_id = db.Column(db.String(255), unique=True)
-    provider = db.Column(db.String(255), unique=True)
+    provider = db.Column(db.String(255))
     picture = db.Column(db.String(255))
+    is_admin = db.Column(db.Boolean, default=False)
 
     @classmethod
     def by_email(cls, email):

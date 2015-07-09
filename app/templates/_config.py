@@ -37,7 +37,9 @@ Config.define(
 <% if (package.flask.useAuth) { %>
 Config.define('AUTH_PROVIDERS', None, 'Configuration for authentication providers', 'Auth')
 Config.define('AVATAR_SIZE', 320, 'Default user picture size to store in DB', 'Auth')
+Config.define('AUTHORIZED_ADMINS', [], 'List of authorized admin e-mail addresses', 'Admin')
 <% } %>
+
 
 def init_app(app, path=None):
     conf = Config.load(path)
