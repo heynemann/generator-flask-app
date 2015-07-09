@@ -57,11 +57,12 @@ setup(
         'pymongo>=2.8,<2.9',
         'flask-mongoengine>=0.7.0,<0.8.0',
         <% } %>
-        <% if (package.flask.useAuth) { %>
-        'Authomatic>=0.0.10,<0.1.0',
+        <% if (package.flask.sqlalchemy) { %>
+        'flask-sqlalchemy>=2.0,<2.1',
         <% } %>
-        # add your dependencies here
-        # remember to use 'package-name>=x.y.z,<x.y+1.0' notation (this way you get bugfixes)
+        <% if (package.flask.useAuth) { %>
+        'Authomatic>=0.1.0,<0.2.0',
+        <% } %>
     ],
     extras_require={
         'tests': tests_require,

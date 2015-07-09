@@ -33,6 +33,13 @@ var FlaskAppGenerator = yeoman.generators.Base.extend({
         });
       }
 
+      prompts.push({
+        type: 'confirm',
+        name: 'sqlalchemy',
+        message: 'Use SQLAlchemy for the models?',
+        default: true
+      });
+
       var authProviders = [
         { name: "Google", value: "google", checked: false },
         { name: "Facebook", value: "facebook", checked: false },
@@ -49,7 +56,8 @@ var FlaskAppGenerator = yeoman.generators.Base.extend({
 
       self.prompt(prompts, function (props) {
         pythonPackage['flask'] = {
-          mongoengine: props.mongoengine
+          mongoengine: props.mongoengine,
+          sqlalchemy: props.sqlalchemy
         };
 
         var pkgAuthProviders = {
@@ -89,6 +97,14 @@ var FlaskAppGenerator = yeoman.generators.Base.extend({
 
     // mongoengine
     if (pkg.services.mongodb && pkg.flask.mongoengine) {
+        this.template('_db.py', pkg.pythonName + '/db.py');
+        this.mkdir(pkg.pythonName + "/models");
+        this.template('_models.py', pkg.pythonName + '/models/__init__.py');
+        this.template('_user.py', pkg.pythonName + '/models/user.py');
+    }
+
+    // sqlalchemy
+    if (pkg.flask.sqlalchemy) {
         this.template('_db.py', pkg.pythonName + '/db.py');
         this.mkdir(pkg.pythonName + "/models");
         this.template('_models.py', pkg.pythonName + '/models/__init__.py');

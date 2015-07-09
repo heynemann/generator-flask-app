@@ -22,7 +22,7 @@ from <%= package.pythonName %> import config as config_module
 from <%= package.pythonName %>.static import assets
 from <%= package.pythonName %> import (
     handlers,
-<% if (package.services.mongodb && package.flask.mongoengine) { %>
+<% if ((package.services.mongodb && package.flask.mongoengine) || package.flask.sqlalchemy) { %>
     db,
 <% } %>
 <% if (package.flask.useAuth) { %>
@@ -33,7 +33,7 @@ from <%= package.pythonName %> import (
 blueprints = (
     handlers,
     assets,
-<% if (package.services.mongodb && package.flask.mongoengine) { %>
+<% if ((package.services.mongodb && package.flask.mongoengine) | package.flask.sqlalchemy) { %>
     db,
 <% } %>
 <% if (package.flask.useAuth) { %>

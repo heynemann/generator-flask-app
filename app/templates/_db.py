@@ -13,10 +13,20 @@ import logging
 import sys
 <% } %>
 
+from flask import Blueprint
 <% if (package.services.mongodb && package.flask.mongoengine) { %>
 from flask.ext.mongoengine import MongoEngine, MongoEngineSessionInterface
 #from flask.ext.mongoengine import MongoEngineSessionInterface
 from pymongo.errors import AutoReconnect
+<% } %>
+<% if (package.flask.sqlalchemy) { %>
+from flask.ext.sqlalchemy import SQLAlchemy
+from flask import got_request_exception
+
+db = SQLAlchemy()
+
+def got_request_exception_handler(sender, exception, **extras):
+    db.session.rollback()  # pragma: no cover
 <% } %>
 
 
@@ -32,8 +42,20 @@ def do_mongoengine_healthcheck():
         return False
 <% } %>
 
+
+mod = Blueprint('db', __name__)
+
+
 def init_app(app):
+    app.register_blueprint(mod)
     logging.info('initializing db')
+<% if (package.flask.sqlalchemy) { %>
+    db.init_app(app)
+    got_request_exception.connect_via(app)(got_request_exception_handler)
+
+    if app.debug:
+        app.config['DEBUG_TB_PANELS'].append('flask_debugtoolbar.panels.sqlalchemy.SQLAlchemyDebugPanel')
+<% } %>
 <% if (package.services.mongodb && package.flask.mongoengine) { %>
     mongo.init_app(app)
 
@@ -42,4 +64,12 @@ def init_app(app):
 
     # uncomment this line and the related import to use mongo as your session store
     #app.session_interface = MongoEngineSessionInterface(mongo)
+<% } %>
+
+<% if (package.flask.sqlalchemy) { %>
+@mod.after_app_request
+def after_app_request(f):
+    if current_app.config.get('COMMIT_ON_AFTER_REQUEST', True):  # pragma: no cover
+        db.session.commit()
+    return f
 <% } %>

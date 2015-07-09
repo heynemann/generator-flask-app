@@ -26,7 +26,9 @@ Config.define('MONGODB_PORT', 3333, 'Port for the MongoDB database', 'MongoDB')
 Config.define('MONGODB_USERNAME', None, 'Username for the MongoDB database', 'MongoDB')
 Config.define('MONGODB_PASSWORD', None, 'Password for the MongoDB database', 'MongoDB')
 <% } %>
-
+<% if (package.flask.sqlalchemy) { %>
+SQLALCHEMY_DATABASE_URI = 'mysql+mysqldb://root@localhost:3306/<%= package.pythonName %>'
+<% } %>
 <% if (package.flask.useAuth) { %>
 Config.define('AUTH_PROVIDERS', None, 'Configuration for authentication providers', 'Auth')
 Config.define('AVATAR_SIZE', 320, 'Default user picture size to store in DB', 'Auth')

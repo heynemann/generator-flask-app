@@ -20,7 +20,6 @@ from authomatic.adapters import WerkzeugAdapter
 from authomatic import Authomatic, provider_id
 from authomatic.providers import oauth2, oauth1
 
-from <%= package.pythonName %>.db import mongo
 from <%= package.pythonName %>.models.user import User
 
 
@@ -53,7 +52,12 @@ def authenticated(f):
 def before_app_request():
     g.user = None
     if 'user_id' in session:
+        <% if (package.services.mongodb && package.flask.mongoengine) { %>
         g.user = User.objects(user_id=session['user_id']).first()
+        <% } %>
+        <% if (package.flask.sqlalchemy) { %>
+        g.user = User.by_id(session['user_id'])
+        <% } %>
 
 
 @mod.route('/login/')
@@ -84,10 +88,14 @@ def login(provider_name):
 
     if result:
         if result.user:
-            first_login = False
             result.user.update()
-            user = User.objects.filter(provider=provider_name, user_id=result.user.id).first()
 
+            <% if (package.services.mongodb && package.flask.mongoengine) { %>
+            user = User.objects.filter(provider=provider_name, user_id=result.user.id).first()
+            <% } %>
+            <% if (package.flask.sqlalchemy) { %>
+            user = User.by_email(result.user.email)
+            <% } %>
 
             picture = ''
             if provider_name == "facebook":
@@ -106,13 +114,16 @@ def login(provider_name):
                     provider=provider_name,
                     picture=picture
                 )
+                <% if (package.services.mongodb && package.flask.mongoengine) { %>
                 user.save()
-                first_login = True
+                <% } %>
             else:
                 user.name = result.user.name
                 user.email = result.user.email
                 user.picture = picture
+                <% if (package.services.mongodb && package.flask.mongoengine) { %>
                 user.save()
+                <% } %>
 
             session['user_id'] = user.user_id
             return redirect_next()
