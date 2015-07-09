@@ -21,7 +21,7 @@ from pymongo.errors import AutoReconnect
 <% } %>
 <% if (package.flask.sqlalchemy) { %>
 from flask.ext.sqlalchemy import SQLAlchemy
-from flask import got_request_exception
+from flask import got_request_exception, current_app
 
 db = SQLAlchemy()
 
@@ -51,6 +51,7 @@ def init_app(app):
     logging.info('initializing db')
 <% if (package.flask.sqlalchemy) { %>
     db.init_app(app)
+    app.db = db
     got_request_exception.connect_via(app)(got_request_exception_handler)
 
     if app.debug:

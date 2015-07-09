@@ -27,7 +27,12 @@ Config.define('MONGODB_USERNAME', None, 'Username for the MongoDB database', 'Mo
 Config.define('MONGODB_PASSWORD', None, 'Password for the MongoDB database', 'MongoDB')
 <% } %>
 <% if (package.flask.sqlalchemy) { %>
-SQLALCHEMY_DATABASE_URI = 'mysql+mysqldb://root@localhost:3306/<%= package.pythonName %>'
+Config.define(
+    'SQLALCHEMY_DATABASE_URI',
+    'mysql+mysqldb://root@localhost:3306/<%= package.pythonName %>',
+    'SQLAlchemy Connection String',
+    'SQLAlchemy'
+)
 <% } %>
 <% if (package.flask.useAuth) { %>
 Config.define('AUTH_PROVIDERS', None, 'Configuration for authentication providers', 'Auth')

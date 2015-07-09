@@ -15,7 +15,6 @@ fileConfig(config.config_file_name)
 # for 'autogenerate' support
 from <%= package.pythonName %> import db
 target_metadata = db.db.metadata
-#target_metadata = None
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:

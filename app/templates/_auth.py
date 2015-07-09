@@ -117,6 +117,9 @@ def login(provider_name):
                 <% if (package.services.mongodb && package.flask.mongoengine) { %>
                 user.save()
                 <% } %>
+                <% if (package.flask.sqlalchemy) { %>
+                current_app.db.session.add(user)
+                <% } %>
             else:
                 user.name = result.user.name
                 user.email = result.user.email

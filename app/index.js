@@ -112,6 +112,10 @@ var FlaskAppGenerator = yeoman.generators.Base.extend({
         this.template('_script.py.mako', pkg.pythonName + '/migrations/script.py.mako');
         this.mkdir(pkg.pythonName + "/migrations/versions");
         this.template('_init.py', pkg.pythonName + '/migrations/versions/__init__.py');
+        this.template(
+          '_300eb7b9958_create_user_table.py',
+          pkg.pythonName + '/migrations/versions/300eb7b9958_create_user_table.py'
+        );
         this.mkdir(pkg.pythonName + "/models");
         this.template('_models.py', pkg.pythonName + '/models/__init__.py');
         this.template('_user.py', pkg.pythonName + '/models/user.py');
