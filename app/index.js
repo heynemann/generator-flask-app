@@ -10,6 +10,15 @@ var PythonPackageGenerator = require('generator-python-package');
 
 var currentPath = path.basename(process.cwd());
 
+var validateOptions = function(app, pkg) {
+  if (pkg.flask.mongoengine && pkg.flask.sqlalchemy) {
+    app.log.error("You need to select either MongoEngine or SQLAlchemy. The generator won't work with both.");
+    return false;
+  }
+  return true;
+};
+
+
 var FlaskAppGenerator = yeoman.generators.Base.extend({
   init: function () {
     PythonPackageGenerator.prototype.init.apply(this, arguments);
@@ -37,7 +46,7 @@ var FlaskAppGenerator = yeoman.generators.Base.extend({
         type: 'confirm',
         name: 'sqlalchemy',
         message: 'Use SQLAlchemy for the models?',
-        default: true
+        default: false
       });
 
       var authProviders = [
@@ -52,6 +61,13 @@ var FlaskAppGenerator = yeoman.generators.Base.extend({
         name: 'authProviders',
         message: 'Services you want to allow your users to authenticate with',
         choices: authProviders
+      });
+
+      prompts.push({
+        type: 'confirm',
+        name: 'admin',
+        message: 'Use Flask Admin?',
+        default: true
       });
 
       self.prompt(prompts, function (props) {
@@ -83,6 +99,11 @@ var FlaskAppGenerator = yeoman.generators.Base.extend({
 
   app: function () {
     var pkg = this.pythonPackage;
+
+    if (!validateOptions(this, pkg)) {
+      return;
+    }
+
     pkg.commandName = pkg.pythonName.replace(/[_]/g, '-');
 
     PythonPackageGenerator.prototype.app.apply(this, [pkg]);
