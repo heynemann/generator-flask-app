@@ -25,6 +25,9 @@ from <%= package.pythonName %> import (
 <% if ((package.services.mongodb && package.flask.mongoengine) || package.flask.sqlalchemy) { %>
     db,
 <% } %>
+<% if (package.flask.admin) { %>
+    admin,
+<% } %>
 <% if (package.flask.useAuth) { %>
     auth,
 <% } %>
@@ -35,6 +38,9 @@ blueprints = (
     assets,
 <% if ((package.services.mongodb && package.flask.mongoengine) | package.flask.sqlalchemy) { %>
     db,
+<% } %>
+<% if (package.flask.admin) { %>
+    admin,
 <% } %>
 <% if (package.flask.useAuth) { %>
     auth,

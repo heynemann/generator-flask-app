@@ -70,10 +70,19 @@ var FlaskAppGenerator = yeoman.generators.Base.extend({
         default: true
       });
 
+      prompts.push({
+        type: 'confirm',
+        name: 'pyres',
+        message: 'Use Resque (PyRes)?',
+        default: true
+      });
+
       self.prompt(prompts, function (props) {
         pythonPackage['flask'] = {
           mongoengine: props.mongoengine,
-          sqlalchemy: props.sqlalchemy
+          sqlalchemy: props.sqlalchemy,
+          admin: props.admin,
+          pyres: props.pyres
         };
 
         var pkgAuthProviders = {
@@ -140,6 +149,10 @@ var FlaskAppGenerator = yeoman.generators.Base.extend({
         this.mkdir(pkg.pythonName + "/models");
         this.template('_models.py', pkg.pythonName + '/models/__init__.py');
         this.template('_user.py', pkg.pythonName + '/models/user.py');
+    }
+
+    if (pkg.flask.admin) {
+        this.template('_admin.py', pkg.pythonName + '/admin.py');
     }
 
     // static assets

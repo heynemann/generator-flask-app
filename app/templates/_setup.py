@@ -62,6 +62,9 @@ setup(
         'alembic>=0.7.6,<0.8.0',
         'mysql-python>=1.2.5,<1.3.0',
         <% } %>
+        <% if (package.flask.admin) { %>
+        'Flask-Admin>=1.2.0,<1.3.0',
+        <% } %>
         <% if (package.flask.useAuth) { %>
         'Authomatic>=0.1.0,<0.2.0',
         <% } %>
