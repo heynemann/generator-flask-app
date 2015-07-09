@@ -82,6 +82,36 @@ mongo_test: kill_mongo_test
 kill_mongo_test:
 	@-ps aux | egrep -i 'mongod.+3334' | egrep -v egrep | awk '{ print $$2 }' | xargs kill -2
 <% } %>
+<% if (package.flask.sqlalchemy) { %>
+migration:
+	@cd <%= package.pythonName %>/ && alembic revision -m "$(DESC)"
+
+auto_migration:
+	@cd <%= package.pythonName %>/ && alembic revision --autogenerate -m "$(DESC)"
+
+drop:
+	@-cd <%= package.pythonName %>/ && alembic downgrade base
+	@$(MAKE) drop_now
+
+drop_now:
+	@mysql -u root -e "DROP DATABASE IF EXISTS <%= package.pythonName %>; CREATE DATABASE IF NOT EXISTS <%= package.pythonName %>"
+	@echo "DB RECREATED"
+
+drop_test:
+	@mysql -u root -e "DROP DATABASE IF EXISTS test_<%= package.pythonName %>; CREATE DATABASE IF NOT EXISTS test_<%= package.pythonName %>"
+	@echo "DB RECREATED"
+
+data:
+	@cd <%= package.pythonName %>/ && alembic upgrade head
+
+data_test:
+	@cd tests/ && alembic upgrade head
+
+db: drop data
+
+db_test: drop_test data_test
+
+<% } %>
 # run tests against all supported python versions
 tox:
 	@tox

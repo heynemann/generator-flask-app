@@ -106,6 +106,12 @@ var FlaskAppGenerator = yeoman.generators.Base.extend({
     // sqlalchemy
     if (pkg.flask.sqlalchemy) {
         this.template('_db.py', pkg.pythonName + '/db.py');
+        this.template('_alembic.ini', pkg.pythonName + '/alembic.ini');
+        this.mkdir(pkg.pythonName + "/migrations");
+        this.template('_env.py', pkg.pythonName + '/migrations/env.py');
+        this.template('_script.py.mako', pkg.pythonName + '/migrations/script.py.mako');
+        this.mkdir(pkg.pythonName + "/migrations/versions");
+        this.template('_init.py', pkg.pythonName + '/migrations/versions/__init__.py');
         this.mkdir(pkg.pythonName + "/models");
         this.template('_models.py', pkg.pythonName + '/models/__init__.py');
         this.template('_user.py', pkg.pythonName + '/models/user.py');
