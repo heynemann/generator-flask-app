@@ -229,32 +229,44 @@ var FlaskAppGenerator = yeoman.generators.Base.extend({
   },
 
   getUsageMessage: function() {
-    var pkg = this.pkg;
-    //this.log("\n\nNow that your project is all created, here is what the make commands can do for you!\n");
-    //this.log("General commands:");
-    //this.log('* "make list" to list all available targets;');
+    var pkg = this.pythonPackage;
 
-    //this.log('* "make setup" to install all dependencies (do not forget to create a virtualenv first);');
-    //this.log('* "make test" to test your application (tests in the tests/ directory);');
+    PythonPackageGenerator.prototype.getUsageMessage.apply(this);
 
-    //if (pkg.services.redis) {
-      //this.log("\nRedis commands:");
-      //this.log('* "make redis" to get a redis instance up (localhost:4444);');
-      //this.log('* "make kill-redis" to kill this redis instance (localhost:4444);');
-      //this.log('* "make redis-test" to get a redis instance up for your unit tests (localhost:4448);');
-      //this.log('* "make kill-redis-test" to kill the test redis instance (localhost:4448);');
-    //}
+    this.log('\nRunning my App:');
+    this.log('  * "make run" to run your application with local.conf (http://local.generator.com:3000/);');
 
-    //if (pkg.services.mongodb) {
-      //this.log("\nMongoDB commands:");
-      //this.log('* "make mongo" to get a mongodb instance up (localhost:3333);');
-      //this.log('* "make kill-mongo" to kill this mongodb instance (localhost:3333);');
-      //this.log('* "make clear-mongo" to clear all data in this mongodb instance (localhost: 3333);');
-      //this.log('* "make mongo-test" to get a mongodb instance up for your unit tests (localhost:3334);');
-      //this.log('* "make kill-mongo-test" to kill the test mongodb instance (localhost: 3334);');
-    //}
+    if (pkg.flask.useAuth) {
+      this.log('  **IMPORTANT**: In order for the authentication to work properly, you must run in http://local.generator.com:3000.');
+      this.log('  This will use the sample oauth apps. In order to run your own app you must change the AUTH_PROVIDERS configuration.');
+      this.log('  Refer to local.conf in order to change that.');
+    }
 
-    //this.log('* "make tox" to run tests against all supported python versions.');
+    if (pkg.flask.admin) {
+      this.log('\nUsing Flask Admin:');
+      this.log('  * Just access http://local.generator.com:3000/admin/;');
+      this.log('  * In order to access the admin you must change your local.conf file to change the AUTHORIZED_ADMINS configuration to include the e-mail you are logging with;');
+    }
+
+    if (pkg.flask.sqlalchemy) {
+      this.log("\nSQL Alchemy commands:");
+      this.log('  * "make migration DESC=\"<description of the migration>\"" to create a new database migration;');
+      this.log('  * "make auto_migration DESC=\"<description of the migration>\"" to create a new database migration automatically from changes in the model;');
+      this.log('  * "make db" to create the database and run migrations;');
+      this.log('  * "make data" to run migrations;');
+      this.log('  **IMPORTANT**: Do not forget to update configuration (local.conf and other environments) with your MySQL (or other database) connection string;');
+    }
+
+    if (pkg.flask.pyres) {
+      this.log("\nPyRes commands:");
+      this.log('  * "make worker" to run a PyRes Worker;');
+      this.log('  * "make resweb" to run a web dashboard for PyRes (available at http://127.0.0.1:3001 - user: admin, pass: 123);');
+      this.log('');
+      this.log('  In order to use pyres, you must specify the queues to listen on. This can be done by setting the DEFAULT_QUEUES configuration or by running workers with "-q queue1,queue2";');
+      this.log('');
+      this.log('  **IMPORTANT**: Do not forget to update configuration (local.conf and other environments) with your redis connection string and change the resweb user and password;');
+    }
+
   },
 
 });
