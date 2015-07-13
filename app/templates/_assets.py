@@ -55,7 +55,7 @@ def init_app(app):
 
     js_files.append(
         assets.Bundle(
-            *get_coffee_files(),
+            *get_coffee_files(app),
             depends=('*.coffee'),
             # OTHER CONFIGS
             filters=['coffeescript'], output=js_out
@@ -129,12 +129,10 @@ def read_bower_json():
     return result
 
 
-def get_coffee_files():
+def get_coffee_files(app):
     coffee_files = []
 
-    coffee_root = os.path.join(
-        os.path.dirname(__file__), 'coffee'
-    )
+    coffee_root = app.config['WEBASSETS_DIRECTORY']
 
     for filename in os.listdir(coffee_root):
         if os.path.splitext(filename)[1] == '.coffee':
