@@ -45,7 +45,9 @@ Before starting, make sure you have:
 
 To setup all the dependencies for your project, run `make setup`.
 
-After all the dependencies have been installed, you should be able to run your application with `make run`.
+After all the dependencies have been installed, you should be able to run your application with `make run`. Your application will be running in port 3000.
+
+If you selected oauth application, make sure you use the host http://local.generator.com:3000/ or change the authorization providers to your own application.
 
 If you have selected sqlalchemy support, you probable need to create the database before running with `make db`.
 
@@ -66,11 +68,6 @@ To run your application tests, just run `make test`.
 * "make redis-test" to get a redis instance up for your unit tests (localhost:4448);
 * "make kill-redis-test" to kill the test redis instance (localhost:4448);
 * "make tox" to run tests against all supported python versions.
-
-### Running my App
-* "make run" to run your application with local.conf (http://local.generator.com:3000/);
-
-**IMPORTANT**: In order for the authentication to work properly, you must run in http://local.generator.com:3000. This will use the sample oauth apps. In order to run your own app you must change the AUTH_PROVIDERS configuration. Refer to local.conf in order to change that.
 
 ### Using Flask Admin
 * Just access http://local.generator.com:3000/admin/;
