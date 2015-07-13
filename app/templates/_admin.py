@@ -58,7 +58,7 @@ class BaseModelView(ModelView):
                 return redirect(url_for('auth.login_page', next=request.path))
 
 
-admin = Admin(name='<%= package.name %>', index_view=RootAdminView(name='Home', url='/admin', endpoint='admin'), template_mode='bootstrap3')
+admin = Admin(name='<%= package.name %>', index_view=RootAdminView(name='Home', url='/admin', endpoint='admin'))
 mod = Blueprint('<%=package.pythonName%>-admin', __name__)
 
 

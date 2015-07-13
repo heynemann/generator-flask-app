@@ -112,6 +112,12 @@ db: drop data
 db_test: drop_test data_test
 
 <% } %>
+<% if (package.flask.pyres) { %>
+resweb:
+	@<%= package.commandName %>-resweb -c ./<%= package.pythonName %>/config/local.conf
+worker:
+	@<%= package.commandName %>-worker -c ./<%= package.pythonName %>/config/local.conf
+<% } %>
 # run tests against all supported python versions
 tox:
 	@tox

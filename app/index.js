@@ -33,20 +33,17 @@ var FlaskAppGenerator = yeoman.generators.Base.extend({
     PythonPackageGenerator.prototype.askFor.apply(this, [true, function(pythonPackage) {
       var prompts = [];
 
-      if (pythonPackage.services.mongodb) {
-        prompts.push({
-          type: 'confirm',
-          name: 'mongoengine',
-          message: 'Use MongoEngine for the models?',
-          default: true
-        });
-      }
+      var orms = [
+        { name: "None", value: "none", selected: true },
+        { name: "MongoEngine", value: "mongoengine", selected: false },
+        { name: "SQL Alchemy", value: "sqlalchemy", selected: false }
+      ];
 
       prompts.push({
-        type: 'confirm',
-        name: 'sqlalchemy',
-        message: 'Use SQLAlchemy for the models?',
-        default: true
+        type: 'list',
+        name: 'orm',
+        message: 'ORM you want to use',
+        choices: orms
       });
 
       var authProviders = [
@@ -70,20 +67,35 @@ var FlaskAppGenerator = yeoman.generators.Base.extend({
         default: true
       });
 
+      var queues = [
+        { name: "None", value: "none", selected: true },
+        { name: "Pyres", value: "pyres", selected: false },
+        { name: "Celery", value: "celery", selected: false }
+      ];
+
       prompts.push({
-        type: 'confirm',
-        name: 'pyres',
-        message: 'Use Resque (PyRes)?',
-        default: true
+        type: 'list',
+        name: 'queue',
+        message: 'Queueing service you want to use',
+        choices: queues
       });
 
       self.prompt(prompts, function (props) {
         pythonPackage['flask'] = {
-          mongoengine: props.mongoengine,
-          sqlalchemy: props.sqlalchemy,
+          mongoengine: props.orm == "mongoengine",
+          sqlalchemy: props.orm == "sqlalchemy",
           admin: props.admin,
-          pyres: props.pyres
+          pyres: props.queue == 'pyres',
+          celery: props.queue == 'celery'
         };
+
+        if (pythonPackage.flask.mongoengine) {
+          pythonPackage.services.mongodb = true;
+        }
+
+        if (pythonPackage.flask.pyres) {
+          pythonPackage.services.redis = true;
+        }
 
         var pkgAuthProviders = {
           google: false,
@@ -91,6 +103,7 @@ var FlaskAppGenerator = yeoman.generators.Base.extend({
           twitter: false,
           github: false
         };
+
         var useAuth = false;
         for (var i=0; i < props.authProviders.length; i++) {
           useAuth = true;
@@ -151,8 +164,16 @@ var FlaskAppGenerator = yeoman.generators.Base.extend({
         this.template('_user.py', pkg.pythonName + '/models/user.py');
     }
 
+    // Flask Admin
     if (pkg.flask.admin) {
         this.template('_admin.py', pkg.pythonName + '/admin.py');
+    }
+
+    // PyRes
+    if (pkg.flask.pyres) {
+        this.template('_queue.py', pkg.pythonName + '/queue.py');
+        this.template('_resweb_ext.py', pkg.pythonName + '/resweb_ext.py');
+        this.template('_pyres_worker.py', pkg.pythonName + '/pyres_worker.py');
     }
 
     // static assets

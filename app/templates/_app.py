@@ -31,6 +31,9 @@ from <%= package.pythonName %> import (
 <% if (package.flask.useAuth) { %>
     auth,
 <% } %>
+<% if (package.flask.pyres) { %>
+    queue,
+<% } %>
 )
 
 blueprints = (

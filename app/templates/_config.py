@@ -39,6 +39,17 @@ Config.define('AUTH_PROVIDERS', None, 'Configuration for authentication provider
 Config.define('AVATAR_SIZE', 320, 'Default user picture size to store in DB', 'Auth')
 Config.define('AUTHORIZED_ADMINS', [], 'List of authorized admin e-mail addresses', 'Admin')
 <% } %>
+<% if (package.services.redis) { %>
+Config.define('REDIS_HOST', '127.0.0.1', 'Redis Host IP', 'Redis')
+Config.define('REDIS_PORT', 4444, 'Redis port', 'Redis')
+Config.define('REDIS_PASS', None, 'Redis Password', 'Redis')
+<% } %>
+<% if (package.flask.pyres) { %>
+Config.define('RESWEB_USER', 'admin', 'PyRes Admin username', 'Redis')
+Config.define('RESWEB_PASS', '123', 'PyRes Admin password', 'Redis')
+# TODO: PLEASE CHANGE THIS TO VALUES THAT MAKE SENSE TO YOUR APP
+Config.define('DEFAULT_QUEUES', ['sample'], 'PyRes Default Queues per Worker', 'Redis')
+<% } %>
 
 
 def init_app(app, path=None):

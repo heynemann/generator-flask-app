@@ -53,21 +53,25 @@ setup(
         'flask-assets>=0.10',
         'cssmin>=0.2.0,<0.3.0',
         'Flask-Script>=2.0.0,<2.1.0',
-        <% if (package.services.mongodb && package.flask.mongoengine) { %>
+<% if (package.services.mongodb && package.flask.mongoengine) { %>
         'pymongo>=2.8,<2.9',
         'flask-mongoengine>=0.7.0,<0.8.0',
-        <% } %>
-        <% if (package.flask.sqlalchemy) { %>
+<% } %>
+<% if (package.flask.sqlalchemy) { %>
         'flask-sqlalchemy>=2.0,<2.1',
         'alembic>=0.7.6,<0.8.0',
         'mysql-python>=1.2.5,<1.3.0',
-        <% } %>
-        <% if (package.flask.admin) { %>
+<% } %>
+<% if (package.flask.admin) { %>
         'Flask-Admin>=1.2.0,<1.3.0',
-        <% } %>
-        <% if (package.flask.useAuth) { %>
+<% } %>
+<% if (package.flask.useAuth) { %>
         'Authomatic>=0.1.0,<0.2.0',
-        <% } %>
+<% } %>
+<% if (package.flask.pyres) { %>
+        'pyres>=1.5,<1.6',
+        'resweb>=0.1.7,<0.2.0',
+<% } %>
     ],
     extras_require={
         'tests': tests_require,
@@ -76,6 +80,10 @@ setup(
         'console_scripts': [
             '<%= package.commandName %>=<%= package.pythonName %>.app:main',
             '<%= package.commandName %>-manage=<%= package.pythonName %>.manage:main',
+<% if (package.flask.pyres) { %>
+            '<%= package.commandName %>-resweb=<%= package.pythonName %>.resweb_ext:main',
+            '<%= package.commandName %>-worker=<%= package.pythonName %>.pyres_worker:main',
+<% } %>
         ],
     },
 )
