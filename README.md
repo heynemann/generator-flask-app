@@ -25,9 +25,7 @@ Yeoman Generator for modern web applications using flask.
 
 To install flask-app generator, run:
 
-    $ npm install generator-flask-app
-
-
+    $ npm install -g generator-flask-app
 
 ## Usage
 
