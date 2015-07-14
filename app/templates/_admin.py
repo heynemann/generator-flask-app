@@ -39,7 +39,7 @@ class RootAdminView(AdminIndexView):
         users = []
         <% } %>
         return self.render('admin_index.html', dt=datetime.now().strftime('%d %M %Y - %H %m %s'), users=users)
-
+<% if (package.flask.sqlalchemy) { %>
 
 class BaseModelView(ModelView):
     def is_accessible(self):
@@ -56,6 +56,7 @@ class BaseModelView(ModelView):
             else:
                 # login
                 return redirect(url_for('auth.login_page', next=request.path))
+<% } %>
 
 
 admin = Admin(name='<%= package.name %>', index_view=RootAdminView(name='Home', url='/admin', endpoint='admin'))

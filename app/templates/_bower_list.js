@@ -5,8 +5,8 @@
 // http://www.opensource.org/licenses/<%= package.license%>-license
 // Copyright (c) <%= package.created.year %>, <%= package.author.name %> <<%= package.author.email %>>
 
-var bower = require('../node_modules/bower');
-var organizeSources = require('../node_modules/organize-bower-sources');
+var bower = require('./node_modules/bower');
+var organizeSources = require('./node_modules/organize-bower-sources');
 var fs = require('fs');
 
 var writeDependenciesFile = function(file, content) {
@@ -22,5 +22,5 @@ var writeDependenciesFile = function(file, content) {
 bower.commands.list({json: true})
 .on('end', function(list){
     var bowerSources = organizeSources( list );
-    writeDependenciesFile('./static/bower_dependencies.json', JSON.stringify(bowerSources));
+    writeDependenciesFile('./<%= package.pythonName %>/static/bower_dependencies.json', JSON.stringify(bowerSources));
 })

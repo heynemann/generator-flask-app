@@ -183,7 +183,7 @@ var FlaskAppGenerator = yeoman.generators.Base.extend({
     this.mkdir(pkg.pythonName + '/static/fonts');
     this.mkdir(pkg.pythonName + '/static/images');
     this.mkdir(pkg.pythonName + '/static/vendor');
-    this.template('_bower_list.js', pkg.pythonName + '/bower_list.js');
+    this.template('_bower_list.js', 'bower_list.js');
     this.template('_init.py', pkg.pythonName + '/static/__init__.py');
     this.template('_assets.py', pkg.pythonName + '/static/assets.py');
     this.template('_base.coffee', pkg.pythonName + '/static/coffee/000-base.coffee');

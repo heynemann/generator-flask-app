@@ -24,8 +24,11 @@ setup-node:
 	@npm install .
 
 setup-bower:
-	@cd <%= package.pythonName %> && bower prune && bower install
-	@cd <%= package.pythonName %> && node bower_list.js
+	@bower prune && bower install
+	@node bower_list.js
+
+assets:
+	@<%= package.commandName %>-manage assets build
 
 # test your application (tests in the tests/ directory)
 test: <% if (package.services.mongodb) { %>mongo_test <% } %><% if (package.services.redis) { %>redis_test <% } %>unit

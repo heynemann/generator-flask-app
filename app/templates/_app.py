@@ -52,10 +52,9 @@ blueprints = (
 
 
 def run_bower_list():
-    bower_list_path = os.path.abspath(os.path.join(os.path.dirname(__file__)))
     bower_list = 'bower_list.js'
     try:
-        os.system('cd %s && node %s' % (bower_list_path, bower_list))
+        os.system('node %s' % bower_list)
     except Exception:
         err = sys.exc_info()[1]
         print "Could not update bower list of assets (%s). Shutting down." % err

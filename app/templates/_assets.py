@@ -53,14 +53,16 @@ def init_app(app):
     if app.debug:
         js_out = 'js/js_app.js'
 
-    js_files.append(
-        assets.Bundle(
-            *get_coffee_files(app),
-            depends=('*.coffee'),
-            # OTHER CONFIGS
-            filters=['coffeescript'], output=js_out
+    coffee_files = get_coffee_files(app)
+    if coffee_files:
+        js_files.append(
+            assets.Bundle(
+                coffee_files,
+                depends=('*.coffee'),
+                # OTHER CONFIGS
+                filters=['coffeescript'], output=js_out
+            )
         )
-    )
 
     app.config['COMPASS_CONFIG'] = dict(
         encoding="utf-8",
@@ -76,10 +78,14 @@ def init_app(app):
     if app.debug:
         js_out = 'js/js_all.js'
 
-    js_all_bundle = assets.Bundle(
-        *js_files,
-        output=js_out
-    )
+    if js_files:
+        js_all_bundle = assets.Bundle(
+            *js_files,
+            output=js_out
+        )
+    else:
+        js_all_bundle = assets.Bundle()
+
     assets_env.register('js_all', js_all_bundle)
 
     css_out = 'css/css_all.%(version)s.css'
@@ -125,7 +131,7 @@ def read_bower_json():
     with open(bower_dependencies, 'r') as f:
         result = json.loads(f.read())
     for k, v in result.items():
-        result[k] = [depFile.replace('static/vendor/', '') for depFile in v]
+        result[k] = [depFile.replace('<%= package.pythonName %>/static/vendor/', '') for depFile in v]
     return result
 
 
