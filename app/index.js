@@ -202,8 +202,8 @@ var FlaskAppGenerator = yeoman.generators.Base.extend({
 
     // bower
     this.template('_package.json', 'package.json');
-    this.template('_bowerrc', pkg.pythonName + '/.bowerrc');
-    this.template('_bower.json', pkg.pythonName + '/bower.json');
+    this.template('_bowerrc', '.bowerrc');
+    this.template('_bower.json', 'bower.json');
 
     // handlers
     this.mkdir(pkg.pythonName + '/handlers');
