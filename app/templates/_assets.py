@@ -71,6 +71,7 @@ def init_app(app):
         sass_dir="scss",
         images_dir="images",
         javascripts_dir="js",
+        project_path=STATIC_PATH,
         relative_assets=True,
     )
 
@@ -88,6 +89,19 @@ def init_app(app):
 
     assets_env.register('js_all', js_all_bundle)
 
+    scss_files = bower_dependencies.get('.scss', [])
+
+    scss_bower_out = 'css/css_bower.%(version)s.css'
+    if app.debug:
+        scss_bower_out = 'css/css_bower.css'
+
+    scss_bower_bundle = assets.Bundle(
+        *scss_files,
+        depends=('_*.scss'),
+        filters=['compass'],
+        output=scss_bower_out
+    )
+
     css_out = 'css/css_all.%(version)s.css'
     if app.debug:
         css_out = 'css/css_all.css'
@@ -95,10 +109,9 @@ def init_app(app):
     css_all_bundle = assets.Bundle(
         'all.scss',
         depends=('_*.scss'),
-        filters=['compass', 'cssmin'],
+        filters=['compass'],
         output=css_out
     )
-    assets_env.register('css_all', css_all_bundle)
 
     css_out = 'css/base.%(version)s.css'
     if app.debug:
@@ -110,7 +123,21 @@ def init_app(app):
         filters=['cssmin'],
         output=css_out
     )
-    assets_env.register('css_base', css_base_bundle)
+
+    css_out = 'css/style.%(version)s.css'
+    if app.debug:
+        css_out = 'css/style.css'
+
+    css_all_bundle = assets.Bundle(
+        scss_bower_bundle,
+        css_base_bundle,
+        css_all_bundle,
+        filters=['cssmin'],
+        output=css_out
+    )
+    assets_env.register('css_all', css_all_bundle)
+
+
 
     if app.debug:
         assets_env.set_updater(TimestampUpdater())
