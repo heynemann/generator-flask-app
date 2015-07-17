@@ -4,7 +4,7 @@ from flask import (
     Blueprint
 )
 
-from flask import current_app, g, redirect, url_for, request
+from flask import current_app, g, redirect, url_for, request, abort
 from flask_admin import Admin, AdminIndexView, expose
 from flask_admin.menu import MenuLink
 <% if (package.flask.sqlalchemy) { %>
@@ -57,7 +57,6 @@ class BaseModelView(ModelView):
                 # login
                 return redirect(url_for('auth.login_page', next=request.path))
 <% } %>
-
 
 admin = Admin(name='<%= package.name %>', index_view=RootAdminView(name='Home', url='/admin', endpoint='admin'))
 mod = Blueprint('<%=package.pythonName%>-admin', __name__)
